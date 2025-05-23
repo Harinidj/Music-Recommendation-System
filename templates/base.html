@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}My Music App{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('home') }}">Home</a>
+        {% if session.get('username') %}
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('favorites') }}">Pookie's Favs</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+            <span class="user">Logged in as {{ session.get('username') }}</span>
+        {% else %}
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('register') }}">Register</a>
+        {% endif %}
+        <button id="dark-mode-toggle">Toggle Dark Mode</button>
+    </nav>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+
+    <script>
+        document.getElementById('dark-mode-toggle').addEventListener('click', function(){
+            document.body.classList.toggle('dark-mode');
+        });
+    </script>
+</body>
+</html>

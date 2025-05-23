@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    <h2>🔥 Featured Tracks for You, Babe</h2>
+    <ul class="tracks">
+        {% for track in tracks %}
+            <li>
+                <strong>{{ track.name }}</strong> by {{ track.artists[0].name }}<br>
+                {% if track.album and track.album.images %}
+                    <img src="{{ track.album.images[0].url }}" alt="Album Art" style="height: 100px;">
+                {% endif %}
+                {% if track.preview_url %}
+                    <audio controls>
+                        <source src="{{ track.preview_url }}" type="audio/mpeg">
+                        Your browser does not support audio.
+                    </audio>
+                {% else %}
+                    <em>No preview available 😢</em>
+                    <a href="{{ track.external_urls.spotify }}" target="_blank">Play on Spotify</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% if session.get('username') %}
+        <hr>
+        <h3>Create a New Playlist</h3>
+        <form method="POST" action="{{ url_for('create_playlist') }}">
+            <input type="text" name="playlist_name" placeholder="Playlist Name" required>
+            <button type="submit">Create Playlist</button>
+        </form>
+
+        <h3>Your Playlists</h3>
+        {% if playlists %}
+            <ul>
+                {% for playlist in playlists %}
+                    <li>{{ playlist.name }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You haven't created any playlists yet, babe. Make one now!</p>
+        {% endif %}
+    {% endif %}
+{% endblock %}

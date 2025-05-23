@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Pookie's Favorites{% endblock %}
+{% block content %}
+    <h2>Your Favorites, Babe</h2>
+    <ul class="tracks">
+        {% for track in tracks %}
+            <li>
+                <strong>{{ track.name }}</strong> by {{ track.artists[0].name }}<br>
+                {% if track.album and track.album.images %}
+                    <img src="{{ track.album.images[0].url }}" alt="Album Art" style="height: 100px;">
+                {% endif %}
+                {% if track.preview_url %}
+                    <audio controls>
+                        <source src="{{ track.preview_url }}" type="audio/mpeg">
+                        Your browser does not support audio.
+                    </audio>
+                {% else %}
+                    <em>No preview available 😭</em>
+                    <a href="{{ track.external_urls.spotify }}" target="_blank">Play on Spotify</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

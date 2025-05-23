@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+    <h2>Hey {{ username }}, let’s jam!</h2>
+
+    <!-- Mood-based Search -->
+    <form method="GET" action="{{ url_for('dashboard') }}">
+        <input type="text" name="q" placeholder="Search for a track..." value="{{ request.args.get('q', '') }}">
+        <select name="mood">
+            <option value="">-- Select Mood --</option>
+            <option value="happy" {% if selected_mood == 'happy' %}selected{% endif %}>Happy</option>
+            <option value="sad" {% if selected_mood == 'sad' %}selected{% endif %}>Sad</option>
+            <option value="energetic" {% if selected_mood == 'energetic' %}selected{% endif %}>Energetic</option>
+            <option value="calm" {% if selected_mood == 'calm' %}selected{% endif %}>Calm</option>
+        </select>
+        <button type="submit">Search</button>
+    </form>
+
+    <ul class="tracks">
+        {% for track in tracks %}
+            <li draggable="true" ondragstart="event.dataTransfer.setData('text/plain', '{{ track.id }}')">
+                <strong>{{ track.name }}</strong> by {{ track.artists[0].name }}<br>
+                {% if track.album and track.album.images %}
+                    <img src="{{ track.album.images[0].url }}" alt="Album Art" style="height: 100px;">
+                {% endif %}
+                {% if track.preview_url %}
+                    <audio controls>
+                        <source src="{{ track.preview_url }}" type="audio/mpeg">
+                        Your browser does not support audio.
+                    </audio>
+                {% else %}
+                    <em>No preview available 😭</em>
+                    <a href="{{ track.external_urls.spotify }}" target="_blank">Play on Spotify</a>
+                {% endif %}
+                <br>
+                <!-- Add Favorite Form -->
+                <form action="{{ url_for('add_favorite') }}" method="POST" style="display:inline;">
+                    <input type="hidden" name="track_id" value="{{ track.id }}">
+                    <button type="submit">Add to Favs</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Drag and Drop Playlist Builder Area -->
+    <h3>Build Your Playlist</h3>
+    <div id="playlist" ondragover="event.preventDefault();" ondrop="dropHandler(event)" style="border: 1px dashed #ccc; min-height:150px; padding:10px;">
+        Drag and drop your favorite tracks here.
+    </div>
+    <script>
+        function dropHandler(ev) {
+            ev.preventDefault();
+            var trackId = ev.dataTransfer.getData('text/plain');
+            var newItem = document.createElement('div');
+            newItem.textContent = "Track: " + trackId;
+            newItem.style.margin = "5px";
+            newItem.style.padding = "5px";
+            newItem.style.border = "1px solid #999";
+            ev.target.appendChild(newItem);
+        }
+    </script>
+{% endblock %}

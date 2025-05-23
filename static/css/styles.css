@@ -1,0 +1,60 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.dark-mode {
+    background-color: #333;
+    color: #f0f0f0;
+}
+
+nav {
+    background-color: #222;
+    color: #fff;
+    padding: 10px;
+}
+
+nav a {
+    color: #fff;
+    margin-right: 15px;
+    text-decoration: none;
+}
+
+.container {
+    padding: 20px;
+}
+
+ul.tracks {
+    list-style: none;
+    padding: 0;
+}
+
+ul.tracks li {
+    margin: 15px 0;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.flashes {
+    list-style: none;
+    padding: 0;
+}
+
+.flashes li {
+    padding: 8px;
+    margin-bottom: 8px;
+}
+
+.flashes .error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.flashes .success {
+    background-color: #d4edda;
+    color: #155724;
+}
